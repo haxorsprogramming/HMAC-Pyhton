@@ -5,5 +5,6 @@ from main_app import views as main_app
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', main_app.login_page)
+    path('', main_app.login_page),
+    path('login/proses', main_app.login_proses)
 ]

@@ -10,6 +10,7 @@ class Pegawai(models.Model):
 
 class Akses_Login(models.Model):
     kd_pegawai = models.CharField(max_length=150)
+    username = models.CharField(max_length=150)
     kata_sandi = models.CharField(max_length=150)
     mac_x = models.CharField(max_length=150)
     mac_y = models.CharField(max_length=150)

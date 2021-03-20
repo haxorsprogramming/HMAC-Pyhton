@@ -61,7 +61,7 @@
     }
 
     canvas {
-      position: absolute;
+       position: absolute;  
     }
     </style>
   </head>
@@ -100,19 +100,22 @@
       </div><!-- navbar-right -->
     </header><!-- navbar -->
   <div id="divLogin">
+    
     <div id="divFaceLogin">
-        <video id="video" width="820" height="560" autoplay muted></video>
+        <img src="https://s3-id-jkt-1.kilatstorage.id/nadhamedia/set_img.png" style="width:700px;margin-top:100px;" id="imgFotoSamping">
+        <video id="video" width="820" height="560" autoplay muted  style="display:none;"></video>
+        <br/>
+       <div style="margin-left:10%;margin-top:30px;"><h4>[[capVerifikasi]]</h4></div>
     </div>
 
-  <div id="" style="padding-left:1050px;margin-top:-820px;margin-right:100px;">
+  <div id="" style="padding-left:1050px;margin-top:-880px;margin-right:100px;">
     <div class="wd-100p">
             <div style="text-align:center;">
                 <img src="https://s3-id-jkt-1.kilatstorage.id/haxors-bucket/cdn/uinsu.png" style="width:150px;">
             </div>
                 <div style="text-align:center;">
                     <h3 class="tx-color-01 mg-b-5">Aplikasi Koperasi Simpan Pinjam </h3>
-                    <p class="tx-color-03 tx-16 mg-b-40">Koperasi PTPN IV Adolina<br>
-                    Universitas Islam Negeri Sumatera Utara
+                    <p class="tx-color-03 tx-16 mg-b-40">Koperasi PTPN IV Adolina<br>         
                     </p>
                 </div>
               <div class="form-group">
@@ -122,19 +125,18 @@
               <div class="form-group">
                 <div class="d-flex justify-content-between mg-b-5">
                   <label class="mg-b-0-f">Password</label>
-                  <a href="#!" class="tx-13" >Forgot password?</a>
                 </div>
                 <input type="password" class="form-control" placeholder="Enter your password" id="txtPassword">
               </div>
-              <a class="btn btn-brand-02 btn-block" href="#!" @click="loginAtc()">Sign In</a>
-              <div class="divider-text">or</div>
-              <button class="btn btn-outline-facebook btn-block">Sign In With Facebook</button>
-              <button class="btn btn-outline-twitter btn-block">Sign In With Twitter</button>
-              <div class="tx-13 mg-t-20 tx-center">Don't have an account? <a href="page-signup.html">Create an Account</a></div>
+              <a class="btn btn-brand-02 btn-block" id="btnLoginAwal" href="#!" @click="loginAtc()">Verifikasi Password</a>
+              <div style="text-align:center;margin-top:20px;">Develop By : Nurul Pratiwi<br/>
+              Program Studi Ilmu Komputer<br/>
+              Fakultas Sains dan Teknologi<br/>
+              Universitas Islam Negeri Sumatera Utara
+              </div>
             </div>
   </div>
   </div>
-
     
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="{% static "forge_template/lib/jquery/jquery.min.js" %}"></script>
