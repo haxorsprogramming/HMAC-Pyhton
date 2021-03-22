@@ -45,7 +45,7 @@ var divLogin = new Vue({
 
                             setTimeout(function(){
                                 window.location.assign(rToDashboard);
-                            }, 10000);
+                            }, 20000);
                         }
                     }
                 });

@@ -52,3 +52,9 @@ def beranda(request):
         'status' : 'sukses'
     }
     return render(request, 'dashboard_page/dashboard.html', context)
+
+def beranda_kita(request):
+    context = {
+        'status' : 'sukses'
+    }
+    return render(request, 'dashboard_page/beranda.html', context)
