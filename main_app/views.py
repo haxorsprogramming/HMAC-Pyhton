@@ -46,3 +46,9 @@ def login_proses(request):
         'nama_pegawai' : nama_pegawai
     }
     return JsonResponse(context, safe=False)
+
+def beranda(request):
+    context = {
+        'status' : 'sukses'
+    }
+    return render(request, 'dashboard_page/dashboard.html', context)

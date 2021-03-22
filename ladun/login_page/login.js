@@ -1,4 +1,5 @@
 var rToProses = server + 'login/proses';
+var rToDashboard = server + 'main_app/beranda';
 var step_verif = 0;
 
 var divLogin = new Vue({
@@ -41,6 +42,10 @@ var divLogin = new Vue({
                             
                             verifikasi_wajah();
                             sukses_verifikasi();
+
+                            setTimeout(function(){
+                                window.location.assign(rToDashboard);
+                            }, 10000);
                         }
                     }
                 });
