@@ -1,0 +1,31 @@
+<div class="rows">
+<div style="margin-top:30px;margin-bottom:20px;">
+    <a href='#!' class='btn btn-primary'>Tambah Data Pegawai</a>
+</div>
+  <table class="table table-hovered" id="tblPegawai">
+    <thead>
+      <tr>
+        <th>Id Pegawai</th>
+        <th>Nama</th>
+        <th>Gambar Wajah</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for hasil_citra in hasil %}
+      <tr>
+        <td style="padding: 60px">{{ hasil_citra.id }}</td>
+        <td>{{ hasil_citra.name }}</td>
+        <td><img src="{{ hasil_citra.face.0.url }}" style="width: 100px" /></td>
+        <td>
+            <a href='#!' class='btn btn-warning'>Hapus</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<script>
+    $('#tblPegawai').dataTable();
+</script>

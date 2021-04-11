@@ -4,6 +4,7 @@ from django.http import JsonResponse
 
 import hashlib
 import json
+import requests
 
 from .models import Akses_Login
 from .models import Pegawai
@@ -58,3 +59,20 @@ def beranda_kita(request):
         'status' : 'sukses'
     }
     return render(request, 'dashboard_page/beranda.html', context)
+
+@csrf_exempt
+def manajemen_pegawai(request):
+    url = "https://api.luxand.cloud/subject"
+    payload = {}
+    headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
+    response = requests.request("GET", url, data=payload, headers=headers)
+    hasil = response.json
+    # print(hasil_arr)
+    context = {
+        'status' : 'sukses',
+        'hasil' : hasil
+    }
+    # print(response.text)
+    # return JsonResponse(context, safe=False)
+    return render(request, 'dashboard_page/manajemen_pegawai.html', context)
+    

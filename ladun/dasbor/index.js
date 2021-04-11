@@ -11,25 +11,10 @@ var divMenu = new Vue({
             divMain.titleApps = "Beranda";
             renderMenu("dashboard/beranda");
         },
-        pengujianAtc : function()
+        manajemenPegawai : function()
         {
-            divMain.titleApps = "Pengujian Encode";
-            renderMenu("dashboard/pengujian");
-        },
-        dataKaligrafiAtc : function()
-        {
-            divMain.titleApps = "Data Kaligrafi";
-            renderMenu("dashboard/data-kaligrafi");
-        },
-        buatKunciRsa : function()
-        {
-            divMain.titleApps = "Buat Kunci RSA";
-            renderMenu("dashboard/buat-kunci-rsa");
-        },
-        pengujianDecodeAtc : function()
-        {
-            divMain.titleApps = "Pengujian Decode";
-            renderMenu("dashboard/pengujian-decode");
+            divMain.titleApps = "Manajemen Pegawai";
+            renderMenu("dashboard/manajemen-pegawai");
         }
     }
 });
