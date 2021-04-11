@@ -1,31 +1,80 @@
-<div class="rows">
-<div style="margin-top:30px;margin-bottom:20px;">
-    <a href='#!' class='btn btn-primary'>Tambah Data Pegawai</a>
-</div>
-  <table class="table table-hovered" id="tblPegawai">
-    <thead>
-      <tr>
-        <th>Id Pegawai</th>
-        <th>Nama</th>
-        <th>Gambar Wajah</th>
-        <th>Aksi</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for hasil_citra in hasil %}
-      <tr>
-        <td style="padding: 60px">{{ hasil_citra.id }}</td>
-        <td>{{ hasil_citra.name }}</td>
-        <td><img src="{{ hasil_citra.face.0.url }}" style="width: 100px" /></td>
-        <td>
-            <a href='#!' class='btn btn-warning'>Hapus</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="rows" id="divPegawai">
+    <div style="margin-top: 30px; margin-bottom: 20px">
+        <a href="#!" class="btn btn-primary" @click="tambahPegawaiAtc()">Tambah Data Pegawai</a>
+    </div>
+    <div id="divDataPegawai">
+        <table class="table table-hover" id="tblPegawai">
+            <thead>
+                <tr>
+                    <th>Id Pegawai</th>
+                    <th>Nama</th>
+                    <th>Gambar Wajah</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for hasil_citra in hasil %}
+                <tr>
+                    <td style="padding: 60px">{{ hasil_citra.id }}</td>
+                    <td>{{ hasil_citra.name }}</td>
+                    <td>
+                        <img src="{{ hasil_citra.face.0.url }}" style="width: 100px" />
+                    </td>
+                    <td>
+                        <a href="#!" class="btn btn-warning">Hapus</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div id="divFormTambahPegawai" style="display: none">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                <div class="form-group">
+                    <label>Nama Pegawai</label>
+                    <input type="text" class="form-control" id="txtNama" name="txtNama" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                <div id="my_camera" style="width: 20px;height:240px;border: 1px solid black;"></div>
+                <div style="margin-top:20px;">
+                    <br/>
+                    <a href="#!" @click="ambilGambar()" class="btn btn-primary">Ambil gambar</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    $('#tblPegawai').dataTable();
+    $("#tblPegawai").dataTable();
+
+    var divPegawai = new Vue({
+        el: "#divPegawai",
+        data: {},
+        methods: {
+            tambahPegawaiAtc: function ()
+            {
+                $("#divDataPegawai").hide();
+                $("#divFormTambahPegawai").show();
+                refreshCamera();
+            },
+            ambilGambar : function ()
+            {
+
+            }
+        },
+    });
+
+    function refreshCamera()
+    {
+        Webcam.set({
+			width: 320,
+			height: 240,
+			image_format: 'jpeg',
+			jpeg_quality: 90
+		});
+		Webcam.attach( '#my_camera' );
+    }
 </script>
