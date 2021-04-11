@@ -32,27 +32,22 @@ var divLogin = new Vue({
                         if(status_login === 'wrong_password'){
                             pesanUmumApp('warning', 'Isi field', 'Username & Password salah!!!');
                         }else{
-                            pesanUmumApp('success', 'Success', 'Login default sukses, silahkan verfikasi wajah !!!');
-                            document.querySelector('#txtUsername').setAttribute('disabled', 'disabled');
-                            document.querySelector('#txtPassword').setAttribute('disabled', 'disabled');
                             $('#btnLoginAwal').hide();
                             $('#imgFotoSamping').hide();
                             $('#video').show();
-                            divLogin.capVerifikasi = "Mulai memverifikasi wajah ...";
-                            
-                            verifikasi_wajah();
-                            sukses_verifikasi();
-
-                            setTimeout(function(){
-                                window.location.assign(rToDashboard);
-                            }, 20000);
+                            loadWebcam();
                         }
                     }
                 });
             }
-
-            
-            
+        },
+        captureAtc : function()
+        {
+            // let dataImg = document.querySelector("#imgHasil").getAttribute("src");
+            var canvas = document.getElementById("cImg");
+            var video = document.getElementById("video");
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            console.log("loss");
         }
     }
 });
@@ -60,6 +55,40 @@ var divLogin = new Vue({
 $('#divImgAwal').hide();
 document.querySelector('#txtUsername').focus();
 
+function loadWebcam()
+{
+    const video = document.getElementById('video')
+
+    Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri('ladun/login_page/models'),
+    faceapi.nets.faceLandmark68Net.loadFromUri('ladun/login_page/models'),
+    faceapi.nets.faceRecognitionNet.loadFromUri('ladun/login_page/models'),
+    faceapi.nets.faceExpressionNet.loadFromUri('ladun/login_page/models')
+    ]).then(startVideo)
+
+    function startVideo() {
+    navigator.getUserMedia(
+        { video: {} },
+        stream => video.srcObject = stream,
+        err => console.error(err)
+    )
+    }
+
+    video.addEventListener('play', () => {
+    const canvas = faceapi.createCanvasFromMedia(video)
+    document.body.append(canvas)
+    const displaySize = { width: video.width, height: video.height }
+    faceapi.matchDimensions(canvas, displaySize)
+    setInterval(async () => {
+        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
+        const resizedDetections = faceapi.resizeResults(detections, displaySize)
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
+        faceapi.draw.drawDetections(canvas, resizedDetections)
+        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
+    }, 100)
+    })
+}
 
 
 function verifikasi_wajah()

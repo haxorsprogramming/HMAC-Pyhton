@@ -87,7 +87,7 @@ def manajemen_pegawai(request):
 @csrf_exempt
 def proses_tambah_pegawai(request):
     url = "https://api.luxand.cloud/subject/v2"
-    headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
+    headers = { "token" : "0c5e5b2cd47c480fbfa6066c3aee9970" }
     imgData = request.POST['dataImg']
     format, imgstr = imgData.split(";base64,")
     dataDecode = ContentFile(base64.b64decode(imgstr))
@@ -99,12 +99,12 @@ def proses_tambah_pegawai(request):
     
     # start upload to facesoft 
     name = 'aditia darma'
-    store = '902'
+    store = '1'
     alamat_pic = "http://127.0.0.1:7001/ladun/pic_upload/" + nama_gambar
     payload = {"name":name,"store":store}
-    # files = { "photo": open(alamat_pic, "rb") }
-    payload["photo"] = "https://s3-id-jkt-1.kilatstorage.id/haxors-bucket/pic_nurul/yEXfsSmTJZ.png"
-    response = requests.request("POST", url, data=payload, headers=headers)
+    files = { "photo": open("ladun/pic_upload/" + nama_gambar, "rb") }
+    payload["photo"] = alamat_pic
+    response = requests.request("POST", url, data=payload, headers=headers, files=files)
 
     context = {
         'status' : 'sukses',

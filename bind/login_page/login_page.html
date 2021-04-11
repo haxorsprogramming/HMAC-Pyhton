@@ -44,8 +44,7 @@
     <link rel="stylesheet" href="{% static "forge_template/assets/css/dashforge.css" %}">
     
     <link rel="stylesheet" href="{% static "forge_template/assets/css/dashforge.auth.css" %}">
-    <script defer src="{% static "login_page/face-api.min.js" %}"></script>
-    <script defer src="{% static "login_page/script.js" %}"></script>
+    
     <style>
     body{
         display: flex;
@@ -106,6 +105,8 @@
         <video id="video" width="820" height="560" autoplay muted  style="display:none;"></video>
         <br/>
        <div style="margin-left:10%;margin-top:30px;"><h4>[[capVerifikasi]]</h4></div>
+       <canvas id="cImg" width="500" height="500"></canvas>
+       <a href="#!" class="btn btn-brand-02 btn-block" @click="captureAtc()">Tes Capture</a>
     </div>
 
   <div id="" style="padding-left:1050px;margin-top:-880px;margin-right:100px;">
@@ -146,11 +147,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     
     <script src="{% static "forge_template/assets/js/dashforge.js" %}"></script>
+    <script defer src="{% static "login_page/face-api.min.js" %}"></script>
+    <script defer src="{% static "login_page/script.js" %}"></script>
     <script>
       const server = "{{ BASE_URL }}";
     </script>
     
     <script src="{% static "login_page/login.js" %}"></script>
+
 
     <!-- append theme customizer -->
     
