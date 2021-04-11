@@ -1,10 +1,18 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.utils.crypto import get_random_string
 
 import hashlib
 import json
 import requests
+import base64
+import os
+
+
 
 from .models import Akses_Login
 from .models import Pegawai
@@ -75,4 +83,32 @@ def manajemen_pegawai(request):
     # print(response.text)
     # return JsonResponse(context, safe=False)
     return render(request, 'dashboard_page/manajemen_pegawai.html', context)
+
+@csrf_exempt
+def proses_tambah_pegawai(request):
+    url = "https://api.luxand.cloud/subject/v2"
+    headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
+    imgData = request.POST['dataImg']
+    format, imgstr = imgData.split(";base64,")
+    dataDecode = ContentFile(base64.b64decode(imgstr))
+    imgRandom = get_random_string(10)
+    nama_gambar = imgRandom+".png"
+    with open("ladun/pic_upload/" + nama_gambar, "wb+") as f:
+        for chunk in dataDecode.chunks():
+            f.write(chunk)
     
+    # start upload to facesoft 
+    name = 'aditia darma'
+    store = '902'
+    alamat_pic = "http://127.0.0.1:7001/ladun/pic_upload/" + nama_gambar
+    payload = {"name":name,"store":store}
+    # files = { "photo": open(alamat_pic, "rb") }
+    payload["photo"] = "https://s3-id-jkt-1.kilatstorage.id/haxors-bucket/pic_nurul/yEXfsSmTJZ.png"
+    response = requests.request("POST", url, data=payload, headers=headers)
+
+    context = {
+        'status' : 'sukses',
+        'respons' : response.text,
+        'lokasi' : alamat_pic
+    }
+    return JsonResponse(context, safe=False)

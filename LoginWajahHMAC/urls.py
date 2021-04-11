@@ -9,5 +9,6 @@ urlpatterns = [
     path('login/proses', main_app.login_proses),
     path('main_app/beranda', main_app.beranda),
     path('dashboard/beranda', main_app.beranda_kita),
-    path('dashboard/manajemen-pegawai', main_app.manajemen_pegawai)
+    path('dashboard/manajemen-pegawai', main_app.manajemen_pegawai),
+    path('dashboard/proses-tambah-pegawai', main_app.proses_tambah_pegawai)
 ]
