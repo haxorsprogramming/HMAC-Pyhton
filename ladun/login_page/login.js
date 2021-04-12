@@ -1,5 +1,5 @@
-var rToProses = server + 'login/proses';
-var rToDashboard = server + 'main_app/beranda';
+var rToProses = server + "login/proses";
+var rToDashboard = server + "main_app/beranda";
 var step_verif = 0;
 
 var divLogin = new Vue({
