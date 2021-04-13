@@ -56,6 +56,13 @@ def login_proses(request):
     }
     return JsonResponse(context, safe=False)
 
+@csrf_exempt
+def identifikasi_wajah(request):
+    context = {
+        'status' : 'sukses'
+    }
+    return JsonResponse(context, safe=False)
+
 def beranda(request):
     context = {
         'status' : 'sukses'
@@ -88,7 +95,15 @@ def manajemen_pegawai(request):
 def proses_tambah_pegawai(request):
     url = "https://api.luxand.cloud/subject/v2"
     headers = { "token" : "0c5e5b2cd47c480fbfa6066c3aee9970" }
+    
+    # 'dataImg': dataImg, 'nama':nama, 'alamat':alamat, 'password':password 
     imgData = request.POST['dataImg']
+    nama = request.POST['nama']
+    alamat = request.POST['alamat']
+    jk = request.POST['jk']
+    password = request.POST['password']
+    username = request.POST['username']
+    pass_hash = hashlib.md5(password.encode("utf-8")).hexdigest()
     format, imgstr = imgData.split(";base64,")
     dataDecode = ContentFile(base64.b64decode(imgstr))
     imgRandom = get_random_string(10)
@@ -98,17 +113,21 @@ def proses_tambah_pegawai(request):
             f.write(chunk)
     
     # start upload to facesoft 
-    name = 'aditia darma'
+    name = username
     store = '1'
     alamat_pic = "http://127.0.0.1:7001/ladun/pic_upload/" + nama_gambar
     payload = {"name":name,"store":store}
     files = { "photo": open("ladun/pic_upload/" + nama_gambar, "rb") }
     payload["photo"] = alamat_pic
     response = requests.request("POST", url, data=payload, headers=headers, files=files)
-
+    save_akses_login = Akses_Login.objects.create(kd_pegawai=imgRandom, username=username, kata_sandi=pass_hash, mac_x="-", mac_y="-", secret_key="NURUL")
+    save_akses_login.save()
+    save_pegawai = Pegawai.objects.create(kd_pegawai=imgRandom, nama_pegawai=nama, jenis_kelamin=jk, alamat=alamat, akses="administrator")
+    save_pegawai.save()
     context = {
         'status' : 'sukses',
         'respons' : response.text,
-        'lokasi' : alamat_pic
+        'lokasi' : alamat_pic,
+        'nama' : nama
     }
     return JsonResponse(context, safe=False)

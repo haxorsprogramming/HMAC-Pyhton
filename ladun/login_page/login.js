@@ -1,6 +1,9 @@
 var rToProses = server + "login/proses";
 var rToDashboard = server + "main_app/beranda";
+var rToIdentifikasiWajah = server + "login/identifikasi-wajah";
+
 var step_verif = 0;
+var kdLogin = "";
 
 var divLogin = new Vue({
     el : '#divLogin',
@@ -43,11 +46,16 @@ var divLogin = new Vue({
         },
         captureAtc : function()
         {
-            // let dataImg = document.querySelector("#imgHasil").getAttribute("src");
             var canvas = document.getElementById("cImg");
             var video = document.getElementById("video");
             canvas.getContext('2d').drawImage(video, 0, 0);
-            console.log("loss");
+            let hasil = canvas.toDataURL();
+            let ds = { 'hasil':hasil }
+            $.post(rToIdentifikasiWajah, ds, function(data){
+                console.log(data);
+            });
+            console.log("Siap dikirim ke server");
+            
         }
     }
 });
@@ -80,15 +88,21 @@ function loadWebcam()
     const displaySize = { width: video.width, height: video.height }
     faceapi.matchDimensions(canvas, displaySize)
     setInterval(async () => {
-        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions()
-        const resizedDetections = faceapi.resizeResults(detections, displaySize)
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height)
-        faceapi.draw.drawDetections(canvas, resizedDetections)
-        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections)
-        faceapi.draw.drawFaceExpressions(canvas, resizedDetections)
-    }, 100)
-    })
+        const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks().withFaceExpressions();
+        const resizedDetections = faceapi.resizeResults(detections, displaySize);
+        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+        faceapi.draw.drawDetections(canvas, resizedDetections);
+        faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+        faceapi.draw.drawFaceExpressions(canvas, resizedDetections);
+        console.log("Mulai detect");
+        step_verif++;
+        if(step_verif === 20){
+            divLogin.captureAtc();
+        }
+    }, 100);
+    });
 }
+
 
 
 function verifikasi_wajah()

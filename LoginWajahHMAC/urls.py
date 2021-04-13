@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', main_app.login_page),
     path('login/proses', main_app.login_proses),
+    path('login/identifikasi-wajah', main_app.identifikasi_wajah),
     path('main_app/beranda', main_app.beranda),
     path('dashboard/beranda', main_app.beranda_kita),
     path('dashboard/manajemen-pegawai', main_app.manajemen_pegawai),
