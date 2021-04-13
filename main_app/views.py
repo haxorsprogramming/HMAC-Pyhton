@@ -58,8 +58,26 @@ def login_proses(request):
 
 @csrf_exempt
 def identifikasi_wajah(request):
+    imgData = request.POST['hasil']
+    format, imgstr = imgData.split(";base64,")
+    dataDecode = ContentFile(base64.b64decode(imgstr))
+    imgRandom = get_random_string(10)
+    nama_gambar = imgRandom+".png"
+    with open("ladun/pic_identifikasi/" + nama_gambar, "wb+") as f:
+        for chunk in dataDecode.chunks():
+            f.write(chunk)
+    alamat_pic = "http://127.0.0.1:7001/ladun/pic_identifikasi/" + nama_gambar
+    url = "https://api.luxand.cloud/photo/search"
+    payload = {}
+    headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
+    files = { "photo": open("ladun/pic_identifikasi/" + nama_gambar, "rb") }
+    payload["photo"] = alamat_pic
+    response = requests.request("POST", url, data=payload, headers=headers, files=files)
+    hasil = response.text
+
     context = {
-        'status' : 'sukses'
+        'status' : 'sukses',
+        'hasil' : hasil
     }
     return JsonResponse(context, safe=False)
 
