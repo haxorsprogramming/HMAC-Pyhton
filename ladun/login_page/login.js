@@ -1,9 +1,11 @@
 var rToProses = server + "login/proses";
 var rToDashboard = server + "main_app/beranda";
 var rToIdentifikasiWajah = server + "login/identifikasi-wajah";
+var rToGetDataPegawai = server + "login/get-data-pegawai";
 
 var step_verif = 0;
 var kdLogin = "";
+var user_login = "";
 
 var divLogin = new Vue({
     el : '#divLogin',
@@ -28,6 +30,8 @@ var divLogin = new Vue({
                 $.post(rToProses, ds, function(data){
                     console.log(data);
                     divLogin.nama_pegawai = data.nama_pegawai;
+                    let username = data.username;
+                    user_login = username;
                     let status_login = data.status_login;
                     if(status_login === 'no_user'){
                         pesanUmumApp('warning', 'No user', 'Username tidak terdaftar!!!');
@@ -52,9 +56,31 @@ var divLogin = new Vue({
             let hasil = canvas.toDataURL();
             let ds = { 'hasil':hasil }
             $.post(rToIdentifikasiWajah, ds, function(data){
-                console.log(data);
+                let obj = JSON.parse(data.hasil);
+                console.log(obj);
+                let hasil_identifikasi = obj[0];
+                let id_pegawai = hasil_identifikasi['id'];
+                let nama = hasil_identifikasi['name'];
+                let probabilitas = hasil_identifikasi['probability'];
+                let ds = {'username':nama}
+                if(nama === user_login){
+                    $.post(rToGetDataPegawai, ds, function(data){
+                        let nama = data.nama;
+                        pesanUmumApp('success', 'Sukses', 'Berhasil mendeteksi user, nama pegawai yang sedang login adalah : '+ nama + ', Anda akan dialihkan ke halaman aplikasi dalam 3 detik');
+                        
+                        setTimeout(function(){
+                            window.location.assign(server + 'main_app/beranda');
+                        }, 4000);
+                    });
+                }else{
+                    pesanUmumApp('warning', 'Failed', 'Gagal mendeteksi, wajah tidak cocok dengan database');
+                    setTimeout(function(){
+                        window.location.assign(server);
+                    }, 2000);
+                    
+                }
+                
             });
-            console.log("Siap dikirim ke server");
             
         }
     }

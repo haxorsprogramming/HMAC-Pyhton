@@ -11,5 +11,6 @@ urlpatterns = [
     path('main_app/beranda', main_app.beranda),
     path('dashboard/beranda', main_app.beranda_kita),
     path('dashboard/manajemen-pegawai', main_app.manajemen_pegawai),
-    path('dashboard/proses-tambah-pegawai', main_app.proses_tambah_pegawai)
+    path('dashboard/proses-tambah-pegawai', main_app.proses_tambah_pegawai),
+    path('login/get-data-pegawai', main_app.get_data_pegawai)
 ]

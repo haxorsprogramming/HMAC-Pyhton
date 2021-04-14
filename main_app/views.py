@@ -42,7 +42,6 @@ def login_proses(request):
             data_pegawai = Pegawai.objects.filter(kd_pegawai__contains=kd_pegawai).first()
             nama_pegawai = data_pegawai.nama_pegawai
             status_login = 'success'
-
         else:
             status_login = 'wrong_password'
             nama_pegawai = '-'
@@ -67,15 +66,15 @@ def identifikasi_wajah(request):
     with open("ladun/pic_identifikasi/" + nama_gambar, "wb+") as f:
         for chunk in dataDecode.chunks():
             f.write(chunk)
-    alamat_pic = "http://127.0.0.1:7001/ladun/pic_identifikasi/" + nama_gambar
-    # url = "https://api.luxand.cloud/photo/search"
-    # payload = {}
-    # headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
-    # files = { "photo": open("ladun/pic_identifikasi/" + nama_gambar, "rb") }
+    alamat_pic = "http://127.0.0.1:7001/ladun/pic_upload/rUZ4sdKVw3.png"
+    url = "https://api.luxand.cloud/photo/search"
+    payload = {}
+    headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
+    files = { "photo": open("ladun/pic_identifikasi/"+nama_gambar, "rb") }
     # payload["photo"] = alamat_pic
-    # response = requests.request("POST", url, data=payload, headers=headers, files=files)
-    result = client.recognize(photo = "https://s3-id-jkt-1.kilatstorage.id/haxors-bucket/pic_nurul/yEXfsSmTJZ.png")
-    hasil = result
+    response = requests.request("POST", url, data=payload, headers=headers, files=files)
+    # result = client.recognize(photo = alamat_pic)
+    hasil = response.text
 
     context = {
         'status' : 'sukses',
@@ -83,6 +82,20 @@ def identifikasi_wajah(request):
         'imgData' : imgData
     }
     return JsonResponse(context, safe=False)
+
+@csrf_exempt
+def get_data_pegawai(request):
+    username = request.POST.get('username')
+    data_user = Akses_Login.objects.filter(username__contains=username).first()
+    kd_pegawai = data_user.kd_pegawai
+    data_pegawai = Pegawai.objects.filter(kd_pegawai__contains=kd_pegawai).first()
+    nama_pegawai = data_pegawai.nama_pegawai
+    context = {
+        'status' : 'sukses',
+        'nama' : nama_pegawai
+    }
+    return JsonResponse(context, safe=False)
+
 
 def beranda(request):
     context = {
