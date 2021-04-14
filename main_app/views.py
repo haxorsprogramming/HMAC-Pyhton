@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.utils.crypto import get_random_string
+from luxand import luxand
 
 import hashlib
 import json
@@ -12,7 +13,7 @@ import requests
 import base64
 import os
 
-
+client = luxand("0c5e5b2cd47c480fbfa6066c3aee9970")
 
 from .models import Akses_Login
 from .models import Pegawai
@@ -67,17 +68,19 @@ def identifikasi_wajah(request):
         for chunk in dataDecode.chunks():
             f.write(chunk)
     alamat_pic = "http://127.0.0.1:7001/ladun/pic_identifikasi/" + nama_gambar
-    url = "https://api.luxand.cloud/photo/search"
-    payload = {}
-    headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
-    files = { "photo": open("ladun/pic_identifikasi/" + nama_gambar, "rb") }
-    payload["photo"] = alamat_pic
-    response = requests.request("POST", url, data=payload, headers=headers, files=files)
-    hasil = response.text
+    # url = "https://api.luxand.cloud/photo/search"
+    # payload = {}
+    # headers = { 'token': "0c5e5b2cd47c480fbfa6066c3aee9970" }
+    # files = { "photo": open("ladun/pic_identifikasi/" + nama_gambar, "rb") }
+    # payload["photo"] = alamat_pic
+    # response = requests.request("POST", url, data=payload, headers=headers, files=files)
+    result = client.recognize(photo = "https://s3-id-jkt-1.kilatstorage.id/haxors-bucket/pic_nurul/yEXfsSmTJZ.png")
+    hasil = result
 
     context = {
         'status' : 'sukses',
-        'hasil' : hasil
+        'hasil' : hasil,
+        'imgData' : imgData
     }
     return JsonResponse(context, safe=False)
 
