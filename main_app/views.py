@@ -13,6 +13,7 @@ import requests
 import base64
 import os
 
+# luxland client 
 client = luxand("0c5e5b2cd47c480fbfa6066c3aee9970")
 
 from .models import Akses_Login
@@ -20,6 +21,7 @@ from .models import Pegawai
 
 # Create your views here.
 def login_page(request):
+    # get ip address client 
     ip_address = request.META['REMOTE_ADDR']
     context = {
         'aplikasi' : '-',
@@ -30,11 +32,16 @@ def login_page(request):
 
 @csrf_exempt
 def login_proses(request):
+    # get username & password data 
     username = request.POST.get('username')
     password = request.POST.get('password')
+    # hash password to md5 hash 
     pass_hash = hashlib.md5(password.encode("utf-8")).hexdigest()
+    # get total user data 
     total_user = Akses_Login.objects.filter(username__contains=username).count()
+    # decision if total user null / nothing
     if total_user > 0 :
+        # get data user with parameter username 
         data_user = Akses_Login.objects.filter(username__contains=username).first()
         kd_pegawai = data_user.kd_pegawai
         password_db = data_user.kata_sandi
@@ -48,12 +55,13 @@ def login_proses(request):
     else:
         status_login = 'no_user'
         nama_pegawai = '-'
-
+    # create data for response 
     context = {
         'username' : username,
         'status_login' : status_login,
         'nama_pegawai' : nama_pegawai
     }
+    # return response json 
     return JsonResponse(context, safe=False)
 
 @csrf_exempt
