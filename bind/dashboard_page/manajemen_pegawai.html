@@ -60,9 +60,15 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-12" style="text-align:center;">
-                <div id="my_camera" style="width: 500px;height:500px;border: 1px solid black;margin-bottom:30px;"></div>
-                <a href="#!" id="btnAmbilGambar" @click="ambilGambar()" class="btn btn-primary"><i class="fas fa-camera"></i> Ambil gambar</a>
+                <!-- <div id="my_camera" style="width: 500px;height:500px;border: 1px solid black;margin-bottom:30px;"></div> -->
                 
+                <div style="width:120px;">
+                 <video autoplay="true" id="video-webcam">
+                        Browsermu tidak mendukung bro, upgrade donk!
+                    </video>
+                </div>
+                <canvas id="cImg" width="500" height="500" style="display:none;"></canvas>
+               <a href="#!" id="btnAmbilGambar" @click="ambilGambar()" class="btn btn-primary"><i class="fas fa-camera"></i> Ambil gambar</a>
                 <div style="margin-top:20px;">
                     <br/>
                     <img id="imgHasil" style="width: 500px;height:300px;display:none;">
@@ -75,6 +81,29 @@
 <script>
     
     var rToProses = server + "dashboard/proses-tambah-pegawai";
+    
+    function startWebcam()
+    {
+        var video = document.querySelector("#video-webcam");
+
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia || navigator.oGetUserMedia;
+
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia({ video: true }, handleVideo, videoError);
+            }
+
+            function handleVideo(stream) {
+                video.srcObject = stream;
+                console.log(stream);
+            }
+
+            function videoError(e) {
+                // do something
+                alert("Izinkan menggunakan webcam untuk demo!")
+            }
+    }
+    
+
 
     $("#tblPegawai").dataTable();
 
@@ -86,16 +115,13 @@
             {
                 $("#divDataPegawai").hide();
                 $("#divFormTambahPegawai").show();
-                refreshCamera();
+                startWebcam();
+                //refreshCamera();
             },
             ambilGambar : function ()
             {
-                Webcam.snap( function(data_uri){
-                    document.querySelector("#imgHasil").setAttribute("src", data_uri);
-                });
-                $('#imgHasil').show();
-                $('#my_camera').hide();
-                $("#btnAmbilGambar").hide();
+                takeSnapshot();
+               
             },
             simpanPegawai : function()
             {
@@ -114,6 +140,17 @@
             }
         },
     });
+
+    function takeSnapshot() {
+        var canvas = document.getElementById("cImg");
+        var video = document.getElementById("video-webcam");
+        canvas.getContext('2d').drawImage(video, 0, 0);
+        let hasil = canvas.toDataURL();
+        document.querySelector("#imgHasil").setAttribute("src", hasil);
+        $('#imgHasil').show();
+        $('#video-webcam').hide();
+        $("#btnAmbilGambar").hide();
+}
 
     function refreshCamera()
     {
@@ -134,4 +171,5 @@
         text : text
     });
     }
+
 </script>
